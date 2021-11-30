@@ -33,7 +33,7 @@ void yyerror(const char *s){
 
 %start program
 %%
-	program : ENTRADA varlist FIM SAIDA varlist FIM cmd FIM
+	program : ENTRADA varlist FIM SAIDA varlist FIM cmds FIM
 	{
 		char* result = malloc(strlen($2) + strlen($4) + strlen($5) + 20);
 		strcpy(result, "int ");
@@ -63,10 +63,26 @@ void yyerror(const char *s){
 		$$ = result;
 	}
 		;
+	cmds	: cmd cmds
+	{
+		char* result = malloc(strlen($1) + strlen($2) + 1);
+		strcpy(result, $1);
+		strcat(result, "\n");
+		strcat(result, $2);
+		$$ = result;
+	}
+		| cmd
+	{
+		char* result = malloc(strlen($1) + 1);
+		strcpy(result, $1);
+		strcat(result, "\n");
+		$$ = result;
+	}
+		;
 	cmd	: INC '(' id ')'
 	{
 		char* result = malloc(strlen($1) + 4);
-		strcpy(result, $1);
+		strcpy(result, $3);
 		strcat(result, "++;");
 		$$ = result;
 
