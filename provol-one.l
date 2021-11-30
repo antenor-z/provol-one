@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "provol_one.tab.h"
+#include "provol-one.tab.h"
 
 void yyerror(char *str);
 int yylex();
