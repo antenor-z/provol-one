@@ -89,7 +89,7 @@ void yyerror(const char *s){
 		| ZERA '(' id ')'
 	{
 		char* result = malloc(strlen($1) + 6);
-		strcpy(result, $1);
+		strcpy(result, $3);
 		strcat(result, " = 0;");
 		$$ = result;
 	}
@@ -107,7 +107,7 @@ void yyerror(const char *s){
 		char* result = malloc(strlen($2) + strlen($4) + 30);
 		strcpy(result, "while(");
 		strcat(result, $2);
-		strcat(result, ") {\n");
+		strcat(result, ") {\n\t");
 
 		strcat(result, $4);
 		
