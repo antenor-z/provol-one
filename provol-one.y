@@ -5,11 +5,12 @@
 
 extern int yylineno; 
 int yylex();
-void yyerror(const char *s){
-	fprintf(stderr, "%s\n", s);
-};
+extern int erro;
 
-int erro = 0;
+void yyerror(const char *s){
+	printf("Linha %d: Erro de sintaxe\n", yylineno - 1);
+	erro = 1;
+};
 
  
 %}
@@ -34,6 +35,7 @@ int erro = 0;
 %right IGUAL
 
 %start program
+%locations
 %%
 	program : HEADER ENTRADA varlist SAIDA varlist FIM PROGRAMA cmds FIM
 	{
@@ -99,15 +101,6 @@ int erro = 0;
 		$$ = result;
 
 	}
-		| INC
-	{
-		erro = 1;
-		printf("Erro na linha %d:\n", yylineno);
-		printf("INC\n");
-		printf("Incrementar o que?\n Correto: INC(valor)\n");
-		char* result = malloc(1);
-		*result = '\0';
-	}
 		| ZERA '(' id ')'
 	{
 		char* result = malloc(strlen($1) + 6);
@@ -156,6 +149,13 @@ int erro = 0;
 		strcat(result, "\t}");
 		$$ = result;
 	}
+		| error
+		{
+			// Ignorar a linha para tentar recuperar do erro
+			char* result = malloc(1);
+			*result = '\0';
+			$$ = result;
+		}
 		;
 
 

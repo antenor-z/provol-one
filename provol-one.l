@@ -6,6 +6,7 @@
 
 void yyerror(char *str);
 int yylex();
+int erro = 0;
 %}
 
 %option yylineno
@@ -27,7 +28,10 @@ ZERA		{ return ZERA; }
 [)]		{ return ')'; }
 [=]		{ return IGUAL; }
 [A-Za-z]+ 	{ yylval.str=strdup(yytext); return id; }
-.		{ printf("Token desconhecido\n"); }
+.		{
+			printf("Linha %d: Caractere desconhecido: \"%s\"\n", yylineno, yytext); 
+			erro = 1;
+		}
 
 
 %%
