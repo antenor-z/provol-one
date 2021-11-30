@@ -14,6 +14,8 @@ int yylex();
 
 [ \t\n]		{ ; }
 ENTRADA		{ return ENTRADA; }
+HEADER		{ return HEADER; }
+PROGRAMA	{ return PROGRAMA; }
 SAIDA		{ return SAIDA; }
 FIM		{ return FIM; }
 ENQUANTO	{ return ENQUANTO; }
