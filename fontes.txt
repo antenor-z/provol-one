@@ -1,0 +1,4 @@
+https://stackoverflow.com/questions/22407730/bison-line-number-included-in-the-error-messages
+https://developer.ibm.com/tutorials/l-flexbison/
+https://stackoverflow.com/questions/16936140/how-to-fetch-the-row-and-column-number-of-error
+https://stackoverflow.com/questions/62115979/how-to-implement-better-error-messages-for-flex-bison

@@ -6,9 +6,10 @@
 extern int yylineno; 
 int yylex();
 extern int erro;
+extern int coluna;
 
 void yyerror(const char *s){
-	printf("Linha %d: Erro de sintaxe\n", yylineno - 1);
+	printf("Linha %d coluna %d: Erro de sintaxe\n", yylineno - 1, coluna);
 	erro = 1;
 };
 

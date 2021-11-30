@@ -1,0 +1,22 @@
+HEADER
+	ENTRADA aa bb
+	SAIDA cc ddd
+FIM
+PROGRAMA
+	a=/b
+	INC(aaa)
+	INC(bbb)
+	ZERA(ccc)
+	d =e
+	ENQUANTO a FACA
+		INC(xxx)
+		INC(yyy)
+		ENQUANTO bab FACA
+			INC aaaaaaa
+			INC(xxx)
+			ZERA(aaa)
+		FIM
+		a = d
+	FIM
+	INC
+FIM

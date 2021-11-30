@@ -1,0 +1,11 @@
+HEADER
+	ENTRADA x y INC
+	SAIDA id
+FIM
+PROGRAMA
+	id
+	INC(aa) INC asd
+	ENQUANTO x FACA
+		INC(z)
+	FIM
+FIM
