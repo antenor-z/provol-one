@@ -123,7 +123,7 @@ void yyerror(const char *s){
 		{
 			*(comTabulacoes + j) = *($4 + i);
 			j++;
-			if(*($4 + i) == '\n')
+			if(*($4 + i) == '\n' && --novasLinhas)
 			{
 				*(comTabulacoes + j) = '\t';
 				j++;
