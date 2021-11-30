@@ -29,19 +29,20 @@ void yyerror(const char *s){
 %token<str> ZERA;
 %token<str> id;
 
+%right IGUAL
 
 %start program
 %%
-	program : ENTRADA varlist SAIDA varlist cmd FIM
+	program : ENTRADA varlist FIM SAIDA varlist FIM cmd FIM
 	{
 		char* result = malloc(strlen($2) + strlen($4) + strlen($5) + 20);
 		strcpy(result, "int ");
 		strcat(result, $2);
 		strcat(result, ";\n");
 		strcat(result, "int ");
-		strcat(result, $4);
-		strcat(result, ";\n");
 		strcat(result, $5);
+		strcat(result, ";\n");
+		strcat(result, $7);
 		$$ = result;
 		printf("%s", $$);
 	
@@ -77,6 +78,16 @@ void yyerror(const char *s){
 		strcat(result, " = 0;");
 		$$ = result;
 	}
+		| id IGUAL id	
+	{
+		char* result = malloc(strlen($1) + 6);
+		strcpy(result, $1);
+		strcat(result, " = ");
+		strcat(result, $3);
+		strcat(result, ";");
+		$$ = result;
+	}
+
 
 %%
 
