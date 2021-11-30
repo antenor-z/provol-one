@@ -34,14 +34,19 @@ void yyerror(const char *s){
 %%
 	program : HEADER ENTRADA varlist SAIDA varlist FIM PROGRAMA cmds FIM
 	{
-		char* result = malloc(strlen($3) + strlen($5) + strlen($8) + 13);
-		strcpy(result, "int ");
+		char* result = malloc(strlen($3) + strlen($5) + strlen($8) + 80);
+		strcpy(result, "#include <stdio.h>\n");
+		strcat(result, "#include <stdlib.h>\n");
+		strcat(result, "int main() {\n");
+		strcat(result, "\tint ");
 		strcat(result, $3);
 		strcat(result, ";\n");
-		strcat(result, "int ");
+		strcat(result, "\tint ");
 		strcat(result, $5);
 		strcat(result, ";\n");
 		strcat(result, $8);
+		strcat(result, "\treturn 0;\n");
+		strcat(result, "}\n");
 		$$ = result;
 		printf("%s", $$);
 	
@@ -64,16 +69,18 @@ void yyerror(const char *s){
 		;
 	cmds	: cmd cmds
 	{
-		char* result = malloc(strlen($1) + strlen($2) + 2);
-		strcpy(result, $1);
+		char* result = malloc(strlen($1) + strlen($2) + 3);
+		strcpy(result, "\t");
+		strcat(result, $1);
 		strcat(result, "\n");
 		strcat(result, $2);
 		$$ = result;
 	}
 		| cmd
 	{
-		char* result = malloc(strlen($1) + 2);
-		strcpy(result, $1);
+		char* result = malloc(strlen($1) + 3);
+		strcpy(result, "\t");
+		strcat(result, $1);
 		strcat(result, "\n");
 		$$ = result;
 	}
@@ -112,12 +119,12 @@ void yyerror(const char *s){
 			if(*($4 + i) == '\n') novasLinhas++;
 		}
 
-		char* result = malloc(strlen($2) + strlen($4) + 12 + novasLinhas);
+		char* result = malloc(strlen($2) + strlen($4) + 13 + novasLinhas);
 		strcpy(result, "while(");
 		strcat(result, $2);
 		strcat(result, ") {\n\t");
 
-		char* comTabulacoes = malloc(strlen($4) + novasLinhas + 1);
+		char* comTabulacoes = malloc(strlen($4) + novasLinhas + 2);
 		int j = 0;
 		for(int i = 0; *($4 + i); i++)
 		{
@@ -131,7 +138,7 @@ void yyerror(const char *s){
 		}
 		
 		strcat(result, comTabulacoes);
-		strcat(result, "}");
+		strcat(result, "\t}");
 		$$ = result;
 	}
 		;
