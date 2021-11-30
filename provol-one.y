@@ -3,8 +3,8 @@
       #include <stdio.h>
       #include <string.h>
 
-char vlist[50];
-char* codigo[500];
+char* vlist;
+char* codigo;
   
 int yylex();
 void yyerror(const char *s){
@@ -18,7 +18,7 @@ void yyerror(const char *s){
 	char *str;
 };
 
-%type <str> program varlist varlist cmds cmd;
+%type <str> program varlist cmds cmd;
 %token<str> ENTRADA;
 %token<str> SAIDA;
 %token<str> FIM;
@@ -32,13 +32,34 @@ void yyerror(const char *s){
 
 %start program
 %%
-	program : ENTRADA varlist FIM { strcat(codigo, "int ");
-				        strcat(codigo, $2);
-					strcat(codigo, ";"); }
+	program : ENTRADA varlist SAIDA varlist FIM
+	{
+		char* result = malloc(strlen($2 + 50));
+		strcpy(result, "int ");
+		strcat(result, $2);
+		strcat(result, ";\n");
+		strcat(result, "int ");
+		strcat(result, $4);
+		strcat(result, ";\n");
+		$$ = result;
+		printf("%s", $$);
+	
+	}
 		;
-	varlist : id varlist	{ strcat(vlist, $1);
-				  strcat(vlist, ", "); }
-		| id		{ strcat(vlist, $1); }
+	varlist : id varlist
+	{
+		char* result = malloc(strlen($1) + strlen($2) + 1);
+		strcpy(result, $1);
+		strcat(result, ", ");
+		strcat(result, $2);
+		$$ = result;
+	}
+		| id
+	{
+		char* result = malloc(strlen($1) + 1);
+		strcpy(result, $1);
+		$$ = result;
+	}
 		;
 
 %%
