@@ -3,10 +3,13 @@
       #include <stdio.h>
       #include <string.h>
 
+extern int yylineno; 
 int yylex();
 void yyerror(const char *s){
 	fprintf(stderr, "%s\n", s);
 };
+
+int erro = 0;
 
  
 %}
@@ -48,7 +51,10 @@ void yyerror(const char *s){
 		strcat(result, "\treturn 0;\n");
 		strcat(result, "}\n");
 		$$ = result;
-		printf("%s", $$);
+		if(erro == 0)
+		{
+			printf("%s", $$);
+		}
 	
 	}
 		;
@@ -92,6 +98,15 @@ void yyerror(const char *s){
 		strcat(result, "++;");
 		$$ = result;
 
+	}
+		| INC
+	{
+		erro = 1;
+		printf("Erro na linha %d:\n", yylineno);
+		printf("INC\n");
+		printf("Incrementar o que?\n Correto: INC(valor)\n");
+		char* result = malloc(1);
+		*result = '\0';
 	}
 		| ZERA '(' id ')'
 	{
