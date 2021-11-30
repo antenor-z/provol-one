@@ -8,6 +8,7 @@ void yyerror(char *str);
 int yylex();
 %}
 
+%option yylineno
 
 %%
 
