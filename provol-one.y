@@ -104,14 +104,33 @@ void yyerror(const char *s){
 	}
 		| ENQUANTO id FACA cmds FIM	
 	{
-		char* result = malloc(strlen($2) + strlen($4) + 13);
+		// Contar quando \n temos para poder alocar mem. suficiente para caber
+		// as tabulações
+		int novasLinhas = 0;
+		for(int i = 0; *($4 + i); i++)
+		{
+			if(*($4 + i) == '\n') novasLinhas++;
+		}
+
+		char* result = malloc(strlen($2) + strlen($4) + 12 + novasLinhas);
 		strcpy(result, "while(");
 		strcat(result, $2);
 		strcat(result, ") {\n\t");
 
-		strcat(result, $4);
+		char* comTabulacoes = malloc(strlen($4) + novasLinhas + 1);
+		int j = 0;
+		for(int i = 0; *($4 + i); i++)
+		{
+			*(comTabulacoes + j) = *($4 + i);
+			j++;
+			if(*($4 + i) == '\n')
+			{
+				*(comTabulacoes + j) = '\t';
+				j++;
+			}
+		}
 		
-
+		strcat(result, comTabulacoes);
 		strcat(result, "}");
 		$$ = result;
 	}
