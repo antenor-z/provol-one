@@ -3,9 +3,6 @@
       #include <stdio.h>
       #include <string.h>
 
-char* vlist;
-char* codigo;
-  
 int yylex();
 void yyerror(const char *s){
 	fprintf(stderr, "%s\n", s);
@@ -35,7 +32,7 @@ void yyerror(const char *s){
 %%
 	program : ENTRADA varlist FIM SAIDA varlist FIM cmds FIM
 	{
-		char* result = malloc(strlen($2) + strlen($4) + strlen($5) + 20);
+		char* result = malloc(strlen($2) + strlen($5) + strlen($7) + 12);
 		strcpy(result, "int ");
 		strcat(result, $2);
 		strcat(result, ";\n");
@@ -103,6 +100,18 @@ void yyerror(const char *s){
 		strcat(result, ";");
 		$$ = result;
 	}
+		| ENQUANTO id FACA cmds FIM
+	
+	{
+		char* result = malloc(strlen($2) + strlen($4) + 30);
+		strcpy(result, "while(");
+		strcat(result, $2);
+		strcat(result, ") {\n");
+		strcat(result, $4);
+		strcat(result, "}\n");
+		$$ = result;
+	}
+		;
 
 
 %%
