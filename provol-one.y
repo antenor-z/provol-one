@@ -17,6 +17,8 @@ void yyerror(const char *s){
 
 %type <str> program varlist cmds cmd;
 %token<str> ENTRADA;
+%token<str> HEADER;
+%token<str> PROGRAMA;
 %token<str> SAIDA;
 %token<str> FIM;
 %token<str> ENQUANTO;
@@ -30,16 +32,16 @@ void yyerror(const char *s){
 
 %start program
 %%
-	program : ENTRADA varlist FIM SAIDA varlist FIM cmds FIM
+	program : HEADER ENTRADA varlist SAIDA varlist FIM PROGRAMA cmds FIM
 	{
-		char* result = malloc(strlen($2) + strlen($5) + strlen($7) + 20);
+		char* result = malloc(strlen($3) + strlen($5) + strlen($8) + 20);
 		strcpy(result, "int ");
-		strcat(result, $2);
+		strcat(result, $3);
 		strcat(result, ";\n");
 		strcat(result, "int ");
 		strcat(result, $5);
 		strcat(result, ";\n");
-		strcat(result, $7);
+		strcat(result, $8);
 		$$ = result;
 		printf("%s", $$);
 	
