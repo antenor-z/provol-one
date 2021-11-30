@@ -32,7 +32,7 @@ void yyerror(const char *s){
 %%
 	program : ENTRADA varlist FIM SAIDA varlist FIM cmds FIM
 	{
-		char* result = malloc(strlen($2) + strlen($5) + strlen($7) + 12);
+		char* result = malloc(strlen($2) + strlen($5) + strlen($7) + 20);
 		strcpy(result, "int ");
 		strcat(result, $2);
 		strcat(result, ";\n");
@@ -100,15 +100,17 @@ void yyerror(const char *s){
 		strcat(result, ";");
 		$$ = result;
 	}
-		| ENQUANTO id FACA cmds FIM
-	
+		| ENQUANTO id FACA cmds FIM	
 	{
 		char* result = malloc(strlen($2) + strlen($4) + 30);
 		strcpy(result, "while(");
 		strcat(result, $2);
 		strcat(result, ") {\n");
+
 		strcat(result, $4);
-		strcat(result, "}\n");
+		
+
+		strcat(result, "}");
 		$$ = result;
 	}
 		;
