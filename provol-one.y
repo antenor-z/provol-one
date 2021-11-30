@@ -7,6 +7,7 @@ extern int yylineno;
 int yylex();
 extern int erro;
 extern int coluna;
+#define C_INC 1
 
 void yyerror(const char *s){
 	printf("Linha %d coluna %d: Erro de sintaxe\n", yylineno - 1, coluna);
@@ -76,7 +77,7 @@ void yyerror(const char *s){
 		$$ = result;
 	}
 		;
-	cmds	: cmd cmds
+	cmds	: cmd  cmds
 	{
 		char* result = malloc(strlen($1) + strlen($2) + 3);
 		strcpy(result, "\t");
@@ -102,6 +103,15 @@ void yyerror(const char *s){
 		$$ = result;
 
 	}
+		| INC error
+		{
+			printf("  > O erro está após o INC.\n");
+			printf("  > Uso do INC: \"INC(var)\" onde var é uma variável.\n");
+			char* result = malloc(1);
+			*result = '\0';
+			$$ = result;
+
+		}
 		| ZERA '(' id ')'
 	{
 		char* result = malloc(strlen($1) + 6);
@@ -109,6 +119,15 @@ void yyerror(const char *s){
 		strcat(result, " = 0;");
 		$$ = result;
 	}
+		| ZERA error
+		{
+			printf("  > O erro está após o ZERA.\n");
+			printf("  > Uso do ZERA: \"ZERA(var)\" onde var é uma variável.\n");
+			char* result = malloc(1);
+			*result = '\0';
+			$$ = result;
+
+		}
 		| id IGUAL id	
 	{
 		char* result = malloc(strlen($1) + strlen($3) + 5);
@@ -117,7 +136,16 @@ void yyerror(const char *s){
 		strcat(result, $3);
 		strcat(result, ";");
 		$$ = result;
-	}
+	}	
+		| id IGUAL error
+		{
+			printf("  > O erro está após o sinal de igual.\n");
+			printf("  > Uso do igual: \"a = b\" onde a e b são variáveis.\n");
+			char* result = malloc(1);
+			*result = '\0';
+			$$ = result;
+		}
+
 		| ENQUANTO id FACA cmds FIM	
 	{
 		// Contar quando \n temos para poder alocar mem. suficiente para caber
