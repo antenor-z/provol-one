@@ -21,7 +21,7 @@ FACA		{ return FACA; }
 INC		{ return INC; }
 ZERA		{ return ZERA; }
 [=]		{ return IGUAL; }
-[a-zA-z]+ 	{ yylval.str=strdup(yytext); return(id); }
+[a-zA-z]+ 	{ yylval.str=strdup(yytext); return id; }
 .		{ printf("Token desconhecido\n"); }
 
 
