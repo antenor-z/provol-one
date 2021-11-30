@@ -20,6 +20,8 @@ ENQUANTO	{ return ENQUANTO; }
 FACA		{ return FACA; }
 INC		{ return INC; }
 ZERA		{ return ZERA; }
+(		{ return '('; }
+)		{ return ')'; }
 [=]		{ return IGUAL; }
 [A-Za-z]+ 	{ yylval.str=strdup(yytext); return id; }
 .		{ printf("Token desconhecido\n"); }
