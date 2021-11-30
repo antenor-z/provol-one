@@ -34,7 +34,7 @@ void yyerror(const char *s){
 %%
 	program : HEADER ENTRADA varlist SAIDA varlist FIM PROGRAMA cmds FIM
 	{
-		char* result = malloc(strlen($3) + strlen($5) + strlen($8) + 20);
+		char* result = malloc(strlen($3) + strlen($5) + strlen($8) + 13);
 		strcpy(result, "int ");
 		strcat(result, $3);
 		strcat(result, ";\n");
@@ -64,7 +64,7 @@ void yyerror(const char *s){
 		;
 	cmds	: cmd cmds
 	{
-		char* result = malloc(strlen($1) + strlen($2) + 1);
+		char* result = malloc(strlen($1) + strlen($2) + 2);
 		strcpy(result, $1);
 		strcat(result, "\n");
 		strcat(result, $2);
@@ -72,7 +72,7 @@ void yyerror(const char *s){
 	}
 		| cmd
 	{
-		char* result = malloc(strlen($1) + 1);
+		char* result = malloc(strlen($1) + 2);
 		strcpy(result, $1);
 		strcat(result, "\n");
 		$$ = result;
