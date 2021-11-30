@@ -62,13 +62,20 @@ void yyerror(const char *s){
 		$$ = result;
 	}
 		;
-	cmd: INC '(' id ')'
+	cmd	: INC '(' id ')'
 	{
 		char* result = malloc(strlen($1) + 4);
 		strcpy(result, $1);
 		strcat(result, "++;");
 		$$ = result;
 
+	}
+		| ZERA '(' id ')'
+	{
+		char* result = malloc(strlen($1) + 6);
+		strcpy(result, $1);
+		strcat(result, " = 0;");
+		$$ = result;
 	}
 
 %%
