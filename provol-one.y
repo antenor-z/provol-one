@@ -95,7 +95,7 @@ void yyerror(const char *s){
 	}
 		| id IGUAL id	
 	{
-		char* result = malloc(strlen($1) + 6);
+		char* result = malloc(strlen($1) + strlen($3) + 5);
 		strcpy(result, $1);
 		strcat(result, " = ");
 		strcat(result, $3);
@@ -104,7 +104,7 @@ void yyerror(const char *s){
 	}
 		| ENQUANTO id FACA cmds FIM	
 	{
-		char* result = malloc(strlen($2) + strlen($4) + 30);
+		char* result = malloc(strlen($2) + strlen($4) + 13);
 		strcpy(result, "while(");
 		strcat(result, $2);
 		strcat(result, ") {\n\t");
