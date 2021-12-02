@@ -36,7 +36,7 @@ void* xmalloc(size_t size)
 	char *str;
 };
 
-%type <str> program varlistEntrada varlistSaida cmds cmd;
+%type <str> program varlistEntrada varlistSaida cmds cmd var;
 %token<str> ENTRADA;
 %token<str> HEADER;
 %token<str> PROGRAMA;
@@ -56,7 +56,7 @@ void* xmalloc(size_t size)
 %%
 	program : HEADER ENTRADA varlistEntrada SAIDA varlistSaida FIM PROGRAMA cmds FIM
 	{
-		char* result = malloc(strlen($3)*2 + strlen($5) + strlen($8) + 30 + 16 * saidasN);
+		char* result = malloc(strlen($3)*2 + strlen($5) + strlen($8) + 300 + 18 * saidasN);
 		strcpy(result, "#include <stdio.h>\n");
 		strcat(result, "#include <stdlib.h>\n");
 		strcat(result, "int main() {\n");
@@ -68,8 +68,6 @@ void* xmalloc(size_t size)
 		strcat(result, ";\n");
 		strcat(result, $8);
 
-		printf("%d", strlen($5));
-		printf("%d", saidasN);
 		for(int i = 0; i < saidasN; i++)
 		{
 			strcat(result, "\tprintf(\"%d\", ");
@@ -140,9 +138,9 @@ void* xmalloc(size_t size)
 		$$ = result;
 	}
 		;
-	cmd	: INC '(' id ')'
+	cmd	: INC '(' var ')'
 	{
-		char* result = malloc(strlen($1) + 4);
+		char* result = malloc(strlen($3) + 4);
 		strcpy(result, $3);
 		strcat(result, "++;");
 		$$ = result;
@@ -157,9 +155,9 @@ void* xmalloc(size_t size)
 			$$ = result;
 
 		}
-		| ZERA '(' id ')'
+		| ZERA '(' var ')'
 	{
-		char* result = malloc(strlen($1) + 6);
+		char* result = malloc(strlen($3) + 6);
 		strcpy(result, $3);
 		strcat(result, " = 0;");
 		$$ = result;
@@ -173,7 +171,7 @@ void* xmalloc(size_t size)
 			$$ = result;
 
 		}
-		| id IGUAL id	
+		| var IGUAL var	
 	{
 		char* result = malloc(strlen($1) + strlen($3) + 5);
 		strcpy(result, $1);
@@ -182,7 +180,7 @@ void* xmalloc(size_t size)
 		strcat(result, ";");
 		$$ = result;
 	}	
-		| id IGUAL error
+		| var IGUAL error
 		{
 			printf("  > O erro está após o sinal de igual.\n");
 			printf("  > Uso do igual: \"a = b\" onde a e b são variáveis.\n");
@@ -191,7 +189,7 @@ void* xmalloc(size_t size)
 			$$ = result;
 		}
 
-		| ENQUANTO id FACA cmds FIM	
+		| ENQUANTO var FACA cmds FIM	
 	{
 		// Contar quando \n temos para poder alocar mem. suficiente para caber
 		// as tabulações
@@ -238,6 +236,35 @@ void* xmalloc(size_t size)
 			char* result = malloc(1);
 			*result = '\0';
 			$$ = result;
+		}
+		;
+	var 	: id
+		{
+			char* result = malloc(strlen($1) + 1);
+			strcpy(result, $1);
+			$$ = result;
+			int existe = 0;
+			for(int i = 0; i < entradasN; i++)
+			{
+				if(strcmp($$, entradas[i]) == 0)
+				{
+					existe = 1;
+				}
+			}
+			for(int i = 0; i < saidasN; i++)
+			{
+				if(strcmp($$, saidas[i]) == 0)
+				{
+					existe = 1;
+				}
+			}
+			if(!existe)
+			{
+				erro = 1;
+				fprintf(stderr, "Linha %d coluna %d:\n", yylineno, coluna);
+				fprintf(stderr, "Erro: variável \"%s\" não existe.\n", $$);
+			}
+
 		}
 		;
 
