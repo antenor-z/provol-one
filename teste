@@ -3,16 +3,16 @@ HEADER
 	SAIDA cc ddd
 FIM
 PROGRAMA
-	a=/b
+	a=b
 	INC(aaa)
 	INC(bbb)
 	ZERA(ccc)
-	d =e
+	d =
 	ENQUANTO a FACA
 		INC(xxx)
 		INC(yyy)
-		ENQUANTO bab FACA
-			INC aaaaaaa
+		ENQUANTO INC(a) FACA
+			INC(aaaaaaa)
 			INC(xxx)
 			ZERA(aaa)
 		FIM
