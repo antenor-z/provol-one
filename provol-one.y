@@ -178,6 +178,15 @@ void yyerror(const char *s){
 		strcat(result, "\t}");
 		$$ = result;
 	}
+		| ENQUANTO error
+		{
+			printf("  > O erro está após o ENQUANTO\n");
+			printf("  > Uso do ENQUANTO: ENQUANTO a FACA cmds FIM\n");
+			printf("  > onde a é uma variável e cmds um ou mais comandos.\n");
+			char* result = malloc(1);
+			*result = '\0';
+			$$ = result;
+		}
 		| error
 		{
 			// Ignorar a linha para tentar recuperar do erro
