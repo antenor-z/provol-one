@@ -9,10 +9,25 @@ extern int erro;
 extern int coluna;
 #define C_INC 1
 
+char* entradas[30];
+int entradasN = 0;
+char* saidas[30];
+int saidasN = 0;
+
 void yyerror(const char *s){
 	printf("Linha %d coluna %d: Erro de sintaxe\n", yylineno - 1, coluna);
 	erro = 1;
 };
+
+void* xmalloc(size_t size)
+{
+	void* result = malloc(size);
+	if(result == NULL)
+	{
+		fprintf(stderr, "Sem memória.\n");
+		exit(1);
+	}
+}
 
  
 %}
@@ -21,7 +36,7 @@ void yyerror(const char *s){
 	char *str;
 };
 
-%type <str> program varlist cmds cmd;
+%type <str> program varlistEntrada varlistSaida cmds cmd;
 %token<str> ENTRADA;
 %token<str> HEADER;
 %token<str> PROGRAMA;
@@ -39,9 +54,9 @@ void yyerror(const char *s){
 %start program
 %locations
 %%
-	program : HEADER ENTRADA varlist SAIDA varlist FIM PROGRAMA cmds FIM
+	program : HEADER ENTRADA varlistEntrada SAIDA varlistSaida FIM PROGRAMA cmds FIM
 	{
-		char* result = malloc(strlen($3) + strlen($5) + strlen($8) + 80);
+		char* result = malloc(strlen($3)*2 + strlen($5) + strlen($8) + 30 + 16 * saidasN);
 		strcpy(result, "#include <stdio.h>\n");
 		strcat(result, "#include <stdlib.h>\n");
 		strcat(result, "int main() {\n");
@@ -52,6 +67,15 @@ void yyerror(const char *s){
 		strcat(result, $5);
 		strcat(result, ";\n");
 		strcat(result, $8);
+
+		printf("%d", strlen($5));
+		printf("%d", saidasN);
+		for(int i = 0; i < saidasN; i++)
+		{
+			strcat(result, "\tprintf(\"%d\", ");
+			strcat(result, saidas[i]);
+			strcat(result, ");\n");
+		}
 		strcat(result, "\treturn 0;\n");
 		strcat(result, "}\n");
 		$$ = result;
@@ -59,22 +83,43 @@ void yyerror(const char *s){
 		{
 			printf("%s", $$);
 		}
+
 	
 	}
 		;
-	varlist : id varlist
+	varlistEntrada : id varlistEntrada
 	{
 		char* result = malloc(strlen($1) + strlen($2) + 3);
 		strcpy(result, $1);
 		strcat(result, ", ");
 		strcat(result, $2);
 		$$ = result;
+		entradas[entradasN++] = $1;
 	}
 		| id
 	{
 		char* result = malloc(strlen($1) + 1);
 		strcpy(result, $1);
 		$$ = result;
+		entradas[entradasN++] = $1;
+	}
+		;
+	
+	varlistSaida : id varlistSaida
+	{
+		char* result = malloc(strlen($1) + strlen($2) + 3);
+		strcpy(result, $1);
+		strcat(result, ", ");
+		strcat(result, $2);
+		$$ = result;
+		saidas[saidasN++] = $1;
+	}
+		| id
+	{
+		char* result = malloc(strlen($1) + 1);
+		strcpy(result, $1);
+		$$ = result;
+		saidas[saidasN++] = $1;
 	}
 		;
 	cmds	: cmd  cmds
