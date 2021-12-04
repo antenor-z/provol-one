@@ -33,7 +33,7 @@ ZERA		{ COL; return ZERA; }
 [(]		{ COL; return '('; }
 [)]		{ COL; return ')'; }
 [=]		{ COL; return IGUAL; }
-[A-Za-z]+ 	{ COL; yylval.str=strdup(yytext); return id; }
+[A-Za-z][A-Za-z0-9]*	{ COL; yylval.str=strdup(yytext); return id; }
 .		{ 
 			COL;
 			printf("Linha %d: Caractere desconhecido: \"%s\"\n", yylineno, yytext); 
