@@ -1,0 +1,12 @@
+HEADER
+	ENTRADA entrada1 entrada2 entrada3 entrada4
+	SAIDA saida1 saida2 saida3
+FIM
+PROGRAMA
+	ZERA(entrada1)
+	ZERA(entrada2)
+	ZERA entrada3
+	INC(entrada1)
+	saida1 = entrada2
+	ZERA
+FIM

@@ -1,0 +1,12 @@
+HEADER
+	ENTRADA entrada1 entrada2 entrada3 entrada4
+	SAIDA saida1 saida2 saida3
+FIM
+PROGRAMA
+	ZERA(entrada2)
+	ENQUANTO entrada1 
+		INC(entrada3)
+	FIM
+	ENQUANTO entrada3 FACA
+		INC(entrada4)
+FIM
