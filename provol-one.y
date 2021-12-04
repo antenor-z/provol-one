@@ -13,9 +13,10 @@ char* entradas[30];
 int entradasN = 0;
 char* saidas[30];
 int saidasN = 0;
+int count = 0;
 
 void yyerror(const char *s){
-	printf("Linha %d coluna %d: Erro de sintaxe\n", yylineno - 1, coluna);
+	printf("Linha %d coluna %d: Erro de sintaxe\n", yylineno, coluna);
 	erro = 1;
 };
 
@@ -59,10 +60,17 @@ void* xmalloc(size_t size)
 		char* result = malloc(strlen($3)*2 + strlen($5) + strlen($8) + 300 + 18 * saidasN);
 		strcpy(result, "#include <stdio.h>\n");
 		strcat(result, "#include <stdlib.h>\n");
-		strcat(result, "int main() {\n");
-		strcat(result, "\tint ");
-		strcat(result, $3);
-		strcat(result, ";\n");
+		strcat(result, "int main(int argc, char* argv[]) {\n");
+		for(int i = 0; i < entradasN; i++)
+		{
+			strcat(result, "\tint ");
+			strcat(result, entradas[entradasN - i - 1]);
+			strcat(result, " = argv[");
+			char a[3];
+			sprintf(a, "%d", i);
+			strcat(result, a);
+			strcat(result, "];\n");
+		}
 		strcat(result, "\tint ");
 		strcat(result, $5);
 		strcat(result, ";\n");
@@ -71,7 +79,7 @@ void* xmalloc(size_t size)
 		for(int i = 0; i < saidasN; i++)
 		{
 			strcat(result, "\tprintf(\"%d\", ");
-			strcat(result, saidas[i]);
+			strcat(result, saidas[saidasN - i - 1]);
 			strcat(result, ");\n");
 		}
 		strcat(result, "\treturn 0;\n");
@@ -87,9 +95,9 @@ void* xmalloc(size_t size)
 		;
 	varlistEntrada : id varlistEntrada
 	{
-		char* result = malloc(strlen($1) + strlen($2) + 3);
+		char* result = malloc(strlen($1) + strlen($2) + 20);
 		strcpy(result, $1);
-		strcat(result, ", ");
+		strcat(result, " = atoi(argv[0]), ");
 		strcat(result, $2);
 		$$ = result;
 		entradas[entradasN++] = $1;
@@ -98,6 +106,7 @@ void* xmalloc(size_t size)
 	{
 		char* result = malloc(strlen($1) + 1);
 		strcpy(result, $1);
+		strcat(result, " = atoi(argv[0])");
 		$$ = result;
 		entradas[entradasN++] = $1;
 	}
@@ -105,8 +114,9 @@ void* xmalloc(size_t size)
 	
 	varlistSaida : id varlistSaida
 	{
-		char* result = malloc(strlen($1) + strlen($2) + 3);
+		char* result = malloc(strlen($1) + strlen($2) + 5);
 		strcpy(result, $1);
+		strcat(result, " = 0");
 		strcat(result, ", ");
 		strcat(result, $2);
 		$$ = result;
@@ -114,8 +124,9 @@ void* xmalloc(size_t size)
 	}
 		| id
 	{
-		char* result = malloc(strlen($1) + 1);
+		char* result = malloc(strlen($1) + 4);
 		strcpy(result, $1);
+		strcat(result, " = 0");
 		$$ = result;
 		saidas[saidasN++] = $1;
 	}
@@ -198,7 +209,7 @@ void* xmalloc(size_t size)
 		{
 			if(*($4 + i) == '\n') novasLinhas++;
 		}
-
+		
 		char* result = malloc(strlen($2) + strlen($4) + 13 + novasLinhas);
 		strcpy(result, "while(");
 		strcat(result, $2);
@@ -230,6 +241,16 @@ void* xmalloc(size_t size)
 			*result = '\0';
 			$$ = result;
 		}
+		| ENQUANTO error FACA error
+		{
+			printf("  > O erro está após o ENQUANTO\n");
+			printf("  > Uso do ENQUANTO: ENQUANTO a FACA cmds FIM\n");
+			printf("  > onde a é uma variável e cmds um ou mais comandos.\n");
+			char* result = malloc(1);
+			*result = '\0';
+			$$ = result;
+		}
+
 		| error
 		{
 			// Ignorar a linha para tentar recuperar do erro
@@ -262,7 +283,7 @@ void* xmalloc(size_t size)
 			{
 				erro = 1;
 				fprintf(stderr, "Linha %d coluna %d:\n", yylineno, coluna);
-				fprintf(stderr, "Erro: variável \"%s\" não existe.\n", $$);
+				fprintf(stderr, "Erro: variável ou comando\"%s\" não existe.\n", $$);
 			}
 
 		}
