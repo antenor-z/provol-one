@@ -68,11 +68,11 @@ void* xmalloc(size_t size)
 		{
 			strcat(result, "\tint ");
 			strcat(result, entradas[entradasN - i - 1]);
-			strcat(result, " = argv[");
+			strcat(result, " = atoi(argv[");
 			char a[3];
 			sprintf(a, "%d", i);
 			strcat(result, a);
-			strcat(result, "];\n");
+			strcat(result, "]);\n");
 		}
 		strcat(result, "\tint ");
 		strcat(result, $5);
@@ -81,7 +81,7 @@ void* xmalloc(size_t size)
 
 		for(int i = 0; i < saidasN; i++)
 		{
-			strcat(result, "\tprintf(\"%d\", ");
+			strcat(result, "\tprintf(\"%d\\n\", ");
 			strcat(result, saidas[saidasN - i - 1]);
 			strcat(result, ");\n");
 		}
