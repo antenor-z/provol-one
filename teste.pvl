@@ -5,23 +5,14 @@ FIM
 PROGRAMA
 	ZERA(entrada1)
 	ZERA(entrada2)
-	ZERA(saida1)
-	ENQUANTO entrada3 FACA
-		INC(entrada4)
-		saida1 = entrada4
-		saida2 = saida1
+	INC(entrada2)
+	INC(entrada2)
+	saida3 = entrada2
+	saida1 = entrada3
+	saida2 = entrada4
+	ENQUANTO saida2 FACA
+		INC(saida1)
+		DEC(saida2)
 	FIM
-	ENQUANTO entrada3 FACA
-		INC(entrada4)
-		saida1 = entrada4
-		saida2 = saida1
-	FIM
-	ENQUANTO entrada3 FACA
-		INC(entrada4)
-		saida1 = entrada4
-		ENQUANTO entrada1 FACA
-			INC(entrada4)
-		FIM
-		saida2 = saida1
-	FIM
+	
 FIM

@@ -29,6 +29,7 @@ FIM		{ COL; return FIM; }
 ENQUANTO	{ COL; return ENQUANTO; }
 FACA		{ COL; return FACA; }
 INC		{ COL; return INC; }
+DEC		{ COL; return DEC; }
 ZERA		{ COL; return ZERA; }
 [(]		{ COL; return '('; }
 [)]		{ COL; return ')'; }

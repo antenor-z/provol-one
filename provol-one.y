@@ -15,8 +15,10 @@ char* saidas[30];
 int saidasN = 0;
 int count = 0;
 
+int offset = 0;
+
 void yyerror(const char *s){
-	printf("Linha %d coluna %d: Erro de sintaxe\n", yylineno, coluna);
+	printf("Linha %d coluna %d: Erro de sintaxe\n", yylineno - offset, coluna);
 	erro = 1;
 };
 
@@ -46,6 +48,7 @@ void* xmalloc(size_t size)
 %token<str> ENQUANTO;
 %token<str> FACA;
 %token<str> INC;
+%token<str> DEC;
 %token<str> IGUAL;
 %token<str> ZERA;
 %token<str> id;
@@ -158,14 +161,31 @@ void* xmalloc(size_t size)
 
 	}
 		| INC error
-		{
+	{
 			printf("  > O erro está após o INC.\n");
 			printf("  > Uso do INC: \"INC(var)\" onde var é uma variável.\n");
 			char* result = malloc(1);
 			*result = '\0';
 			$$ = result;
 
-		}
+	}
+		| DEC '(' var ')'
+	{
+		char* result = malloc(strlen($3) + 4);
+		strcpy(result, $3);
+		strcat(result, "--;");
+		$$ = result;
+
+	}
+		| DEC error
+	{
+			printf("  > O erro está após o DEC.\n");
+			printf("  > Uso do DEC: \"DEC(var)\" onde var é uma variável.\n");
+			char* result = malloc(1);
+			*result = '\0';
+			$$ = result;
+	}
+
 		| ZERA '(' var ')'
 	{
 		char* result = malloc(strlen($3) + 6);
