@@ -15,10 +15,11 @@ char* saidas[30];
 int saidasN = 0;
 int count = 0;
 
+int erroAnterior = 0;
+
 int offset = 0;
 
 void yyerror(const char *s){
-	printf("Linha %d coluna %d: Erro de sintaxe\n", yylineno - offset, coluna);
 	erro = 1;
 };
 
@@ -162,11 +163,14 @@ void* xmalloc(size_t size)
 	}
 		| INC error
 	{
+			printf("Linha %d:\n", @1.first_line);
 			printf("  > O erro está após o INC.\n");
 			printf("  > Uso do INC: \"INC(var)\" onde var é uma variável.\n");
 			char* result = malloc(1);
+			offset = 1;
 			*result = '\0';
 			$$ = result;
+			erroAnterior = @1.first_line;
 
 	}
 		| DEC '(' var ')'
@@ -179,11 +183,14 @@ void* xmalloc(size_t size)
 	}
 		| DEC error
 	{
+			printf("Linha %d:\n", @1.first_line);
 			printf("  > O erro está após o DEC.\n");
 			printf("  > Uso do DEC: \"DEC(var)\" onde var é uma variável.\n");
+			offset = 1;
 			char* result = malloc(1);
 			*result = '\0';
 			$$ = result;
+			erroAnterior = @1.first_line;
 	}
 
 		| ZERA '(' var ')'
@@ -195,11 +202,14 @@ void* xmalloc(size_t size)
 	}
 		| ZERA error
 		{
+			printf("Linha %d:\n", @1.first_line);
 			printf("  > O erro está após o ZERA.\n");
 			printf("  > Uso do ZERA: \"ZERA(var)\" onde var é uma variável.\n");
+			offset = 1;
 			char* result = malloc(1);
 			*result = '\0';
 			$$ = result;
+			erroAnterior = @1.first_line;
 
 		}
 		| var IGUAL var	
@@ -213,11 +223,13 @@ void* xmalloc(size_t size)
 	}	
 		| var IGUAL error
 		{
+			printf("Linha %d:\n", @1.first_line);
 			printf("  > O erro está após o sinal de igual.\n");
 			printf("  > Uso do igual: \"a = b\" onde a e b são variáveis.\n");
 			char* result = malloc(1);
 			*result = '\0';
 			$$ = result;
+			erroAnterior = @1.first_line;
 		}
 
 		| ENQUANTO var FACA cmds FIM	
@@ -254,25 +266,38 @@ void* xmalloc(size_t size)
 	}
 		| ENQUANTO error
 		{
+			printf("Linha %d:\n", @1.first_line);
 			printf("  > O erro está após o ENQUANTO\n");
 			printf("  > Uso do ENQUANTO: ENQUANTO a FACA cmds FIM\n");
 			printf("  > onde a é uma variável e cmds um ou mais comandos.\n");
 			char* result = malloc(1);
 			*result = '\0';
 			$$ = result;
+			erroAnterior = @1.first_line;
 		}
 		| ENQUANTO error FACA error
 		{
+			printf("Linha %d:\n", @1.first_line);
 			printf("  > O erro está após o ENQUANTO\n");
 			printf("  > Uso do ENQUANTO: ENQUANTO a FACA cmds FIM\n");
 			printf("  > onde a é uma variável e cmds um ou mais comandos.\n");
+			printf("Linha %d\n", @1.first_line);
 			char* result = malloc(1);
 			*result = '\0';
 			$$ = result;
+			erroAnterior = @1.first_line;
 		}
 
 		| error
 		{
+
+			if(@1.first_line != erroAnterior)
+			{
+				erroAnterior = @1.first_line;
+				printf("Linha %d:\n", @1.first_line);
+				printf("  > Erro desconhecido.\n");
+				printf("  > Talvez algum ENQUANTO não foi fechado com FIM\n");
+			}
 			// Ignorar a linha para tentar recuperar do erro
 			char* result = malloc(1);
 			*result = '\0';
@@ -302,8 +327,9 @@ void* xmalloc(size_t size)
 			if(!existe)
 			{
 				erro = 1;
-				fprintf(stderr, "Linha %d coluna %d:\n", yylineno, coluna);
-				fprintf(stderr, "Erro: variável ou comando\"%s\" não existe.\n", $$);
+				fprintf(stderr, "Linha %d:\n", @1.first_line);
+				fprintf(stderr, "  > Erro: variável ou comando \"%s\" não existe.\n", $$);
+				erroAnterior = @1.first_line;
 			}
 
 		}
