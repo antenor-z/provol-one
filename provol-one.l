@@ -8,6 +8,7 @@
 static int proxColuna = 1;
 int coluna = 1;
 #define COL coluna = proxColuna; proxColuna += strlen(yytext)
+#define YY_USER_ACTION yylloc.first_line = yylloc.last_line = yylineno;
 
 void yyerror(char *str);
 int yylex();

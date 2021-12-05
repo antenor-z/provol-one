@@ -5,11 +5,12 @@ FIM
 PROGRAMA
 	ZERA(entrada1)
 	ZERA(entrada2)
-	INC(entrada1)
+	DEC(entrada1)
 	saida1 = entrada2
-	INc(entrada1)
+	DE(entrada1)
 	ZERA(entrada4)
-	INC entrada1
+	DEC entrada1
 	ZERA(entrada4)
-	INC
+	DEC
+	ZERA(entrada4)
 FIM

@@ -4,9 +4,9 @@ HEADER
 FIM
 PROGRAMA
 	ZERA(entrada2)
-	ENQUANTO entrada1 
+	ENQUANTO entrada1 FACA
 		INC(entrada3)
 	FIM
-	ENQUANTO entrada3 FACA
+	ENQUANTO entrada3
 		INC(entrada4)
 FIM

@@ -3,24 +3,33 @@ HEADER
 	SAIDA saida1 saida2 saida3
 FIM
 PROGRAMA
-	ZERA(entrada1)
+	ZERA(entrada1
 	ZERA(entrada2)
-	INC(entrada2)
+	INc(entrada2)
 	INC(entrada2)
 	saida3 = entrada2
-	saida1 = entrada3
+	saida1 = entrada0
 	saida2 = entrada4
 	ENQUANTO saida2 FACA
 		INC(saida1)
-		DEC(saida2)
+		DEC DEC
+		ENQUANTO saida5 FACA
+			INC(saida5)
+		FIM
 	FIM
 	ENQUANTO saida2 FACA
 		INC(saida1)
-		DEC(saida2)
+		DEC DEC
+		ENQUANTO saida5 FACA
+			INC(saida5)
+		FIM
 	FIM
 	ENQUANTO saida2 FACA
 		INC(saida1)
-		DEC(saida2)
+		DEC DEC
+		ENQUANTO saida5 FACA
+			INC(saida5)
+		FIM
 	FIM
 	
 FIM
