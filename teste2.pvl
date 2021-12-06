@@ -1,0 +1,24 @@
+HEADER
+	ENTRADA a b c
+	SAIDA a2 b2 c3
+FIM
+PROGRAMA
+	ENQUANTO c FACA
+		INC(a)
+		INC(b)
+		DEC(c)
+	FIM
+	ENQUANTO a FACA
+		ENQUANTO b FACA
+			ENQUANTO c FACA
+				INC(a2)
+				DEC(b2)
+				DEC(c)
+			FIM
+			DEC(b)
+		FIM
+		DEC (a)
+	FIM
+	ZERA(a)
+	DEC(c)
+FIM
